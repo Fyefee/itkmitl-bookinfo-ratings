@@ -12,6 +12,12 @@ MIT License
 node ratings.js 8080
 ```
 
+## How to run with Docker Compose
+
+```bash
+docker-compose up
+```
+
 ## How to run with Docker
 
 ```bash
