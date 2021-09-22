@@ -5,4 +5,13 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SERVICE_VERSION: v1
+      SERVICE_VERSION: v2
+      MONGO_DB_URL: "mongodb://mongodb:27017/ratings"
+    links:
+      - "mongodb:mongodb"
+  mongodb:
+    image: bitnami/mongodb:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - "~/ratings/databases:/docker-entrypoint-initdb.d"
