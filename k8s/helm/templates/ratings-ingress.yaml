@@ -1,14 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  {{- if .Values.ingress.annotations }}
   annotations:
-    {{- range $key, $value := .Values.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
-  {{- end }}
-  name: {{ .Release.Name }}
-  namespace: {{ .Values.ratings.namespace }}
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: bookinfo-dev-ratings
+  namespace: student19-bookinfo-dev
 spec:
   rules:
   - host: itkmitl.bookinfo.dev.opsta.net
@@ -18,6 +15,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Release.Name }}
+            name: bookinfo-dev-ratings
             port:
-              number: {{ .Values.ratings.port }}
+              number: 8080

@@ -1,46 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
-  namespace: {{ .Values.ratings.namespace }}
+  name: bookinfo-dev-ratings
+  namespace: student19-bookinfo-dev
   labels:
-    app: {{ .Release.Name }}
+    app: bookinfo-dev-ratings
 spec:
-  replicas: {{ .Values.ratings.replicas }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: bookinfo-dev-ratings
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: bookinfo-dev-ratings
     spec:
       containers:
-      - name: {{ .Release.Name }}
-        image: {{ .Values.ratings.image }}:{{ .Values.ratings.tag }}
+      - name: bookinfo-dev-ratings
+        image: ghcr.io/fyefee/bookinfo-ratings:dev
         imagePullPolicy: Always
-        {{- if or (.Values.extraEnv) (.Values.extraEnvSecret) }}
         env:
-
-        {{- if .Values.extraEnv }}
-        {{- range $key, $value := .Values.extraEnv }}
-        - name: {{ $key }}
-          value: {{ $value | quote }}
-        {{- end }}
-        {{- end }}
-
-        {{- if .Values.extraEnvSecret }}
-        {{- range $key, $value := .Values.extraEnvSecret }}
-        {{- range $secretName, $secretValue := $value }}
-        - name: {{ $key }}
+        - name: SERVICE_VERSION
+          value: v2
+        - name: MONGO_DB_URL
+          value: mongodb://bookinfo-dev-ratings-mongodb:27017/ratings
+        - name: MONGO_DB_USERNAME
+          value: ratings
+        - name: MONGO_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ $secretName }}
-              key: {{ $secretValue | quote }}
-        {{- end }}
-        {{- end }}
-        {{- end }}
-
-        {{- end }}
+              name: bookinfo-dev-ratings-mongodb-secret
+              key: mongodb-password
       imagePullSecrets:
-      - name: {{ .Values.ratings.imagePullSecrets }}
+      - name: registry-bookinfo

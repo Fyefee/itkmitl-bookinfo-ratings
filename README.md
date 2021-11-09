@@ -33,6 +33,38 @@ docker run -d --name ratings -p 8080:8080 --link mongodb:mongodb \
   -e SERVICE_VERSION=v2 -e 'MONGO_DB_URL=mongodb://mongodb:27017/ratings' ratings
 ```
 
+## How to run with Kubernetes
+
+```bash
+# Create namespace & Set default working namespace
+
+# Create Kubernetes imagePullSecrets
+kubectl create secret generic registry-bookinfo \
+  --from-file=.dockerconfigjson=$HOME/.docker/config.json \
+  --type=kubernetes.io/dockerconfigjson
+
+# Create Kubernetes Secret for MongoDB password
+helm install mongodb bitnami/mongodb --set persistence.enabled=false
+export MONGODB_ROOT_PASSWORD=$(kubectl get secret mongodb \
+  -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
+kubectl create secret generic bookinfo-dev-ratings-mongodb-secret \
+  --from-literal=mongodb-password=CHANGEME \
+  --from-literal=mongodb-root-password=CHANGEME
+
+# Create Kubernetes ConfigMap for MongoDB initial database script
+kubectl create configmap bookinfo-dev-ratings-mongodb-initdb \
+  --from-file=databases/ratings_data.json \
+  --from-file=databases/script.sh
+
+# Deploy MongoDB with Helm to be ready for Rating Service
+helm uninstall mongodb
+helm install -f k8s/helm-values/values-bookinfo-dev-ratings-mongodb.yaml \
+  bookinfo-dev-ratings-mongodb bitnami/mongodb --version 10.28.4
+
+# Deploy Ratings Helm Chart
+helm install bookinfo-dev-ratings k8s/helm
+```
+
 ## Website
 
 [Opsta (Thailand) Co., Ltd.](https://www.opsta.co.th)
