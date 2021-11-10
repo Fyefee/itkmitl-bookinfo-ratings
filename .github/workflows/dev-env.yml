@@ -20,7 +20,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: dev
+          tags: ghcr.io/fyefee/bookinfo-ratings:dev
           secrets: |
             GIT_AUTH_TOKEN=${{ secrets.GITHUB_TOKEN }}
       #- run: docker build -t ghcr.io/fyefee/bookinfo-ratings:dev .
