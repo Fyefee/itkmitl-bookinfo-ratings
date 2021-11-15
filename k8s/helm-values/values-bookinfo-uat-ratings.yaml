@@ -18,3 +18,4 @@ extraEnv:
   MONGO_DB_USERNAME: ratings
 extraEnvSecret:
   MONGO_DB_PASSWORD:
+      bookinfo-uat-ratings-mongodb-secret: mongodb-password
