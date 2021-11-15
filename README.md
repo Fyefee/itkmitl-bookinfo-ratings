@@ -65,6 +65,12 @@ helm install -f k8s/helm-values/values-bookinfo-dev-ratings-mongodb.yaml \
 helm install bookinfo-dev-ratings k8s/helm
 ```
 
+```bash
+# Testing
+curl http://itkmitl.bookinfo.dev.opsta.net/student19/ratings/health
+curl http://itkmitl.bookinfo.dev.opsta.net/student19/ratings/ratings/1
+```
+
 ## Website
 
 [Opsta (Thailand) Co., Ltd.](https://www.opsta.co.th)
