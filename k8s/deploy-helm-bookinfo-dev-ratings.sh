@@ -1,4 +1,4 @@
-# curl http://itkmitl.bookinfo.dev.opsta.net/student19/ratings/health
+#  curl http://itkmitl.bookinfo.dev.opsta.net/student19/ratings/health
 # curl http://itkmitl.bookinfo.dev.opsta.net/student19/ratings/ratings/1
 helm install mongodb bitnami/mongodb --set persistence.enabled=false
 export MONGODB_ROOT_PASSWORD=$(kubectl get secret mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
